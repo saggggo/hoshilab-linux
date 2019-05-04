@@ -2,7 +2,9 @@
 *.pyo
 /*.patch
 /.repo/
-/build*/
+/build/*
+!/build/conf/
+/build/conf/sanity_info
 pyshtables.py
 pstage/
 scripts/oe-git-proxy-socks
