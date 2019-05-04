@@ -1,0 +1,3 @@
+[submodule "meta-altera"]
+	path = meta-altera
+	url = https://github.com/kraj/meta-altera
