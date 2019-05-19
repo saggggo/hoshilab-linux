@@ -14,6 +14,7 @@ meta-*/
 !meta-altera
 !meta-skeleton
 !meta-selftest
+!meta-hoshiconf
 hob-image-*.bb
 *.swp
 *.orig
