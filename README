@@ -1,0 +1,6 @@
+# yocto configuration for me.
+
+1. source oe-init-build-dev
+2. bitbake virtual/bootloader
+3. bitbake virtual/kernel
+4. bitbake core-image-minimal
