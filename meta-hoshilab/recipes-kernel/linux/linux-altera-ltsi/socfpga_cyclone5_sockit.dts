@@ -552,6 +552,12 @@
 			};
 		};
 
+		fpga_bridge@c0000000 {
+			compatible = "altr,socfpga-hps2fpga-bridge";
+			reg = <0xc0000000 0x10000000>;
+      bridge-enable = <1>;
+		};
+
 		fpga_bridge@ff200000 {
 			compatible = "altr,socfpga-lwhps2fpga-bridge";
 			reg = <0xff200000 0x200000>;
@@ -560,9 +566,7 @@
 			phandle = <0x49>;
 			#address-cells = <1>;
       #size-cells = <1>;
-			ranges = <0x00000 0xff200000 0x100>,
-               <0x00100 0xff200100 0x80>,
-               <0x00180 0xff200180 0x80>,
+			ranges = <0x00000 0xff200000 0x40>,
                <0x10000 0xff210000 0x8>,
                <0x10040 0xff210040 0x10>,
                <0x10080 0xff210080 0x10>,
@@ -570,40 +574,15 @@
                <0x20000 0xff220000 0x8>;
       bridge-enable = <1>;
 
-			vip-mix@100000000 {
-				compatible = "ALTR,vip-video-mixer-13.1", "ALTR,vip-video-mixer-1.0";
-				reg = <0x00000 0x100>;
-				num-channels = <0x4>;
-				phandle = <0x56>;
-			};
-
-			vip1@100000100 {
-				compatible = "ALTR,vip-frame-reader-14.0", "ALTR,vip-frame-reader-9.1", "simple-framebuffer";
-				reg = <0x00100 0x80>;
-				interrupt-parent = <0x2>;
-				interrupts = <0x0 0x2b 0x4>;
-				max-width = <0x280>;
-				max-height = <0x1e0>;
-				bits-per-color = <0x8>;
-				colors-per-beat = <0x4>;
-				beats-per-pixel = <0x1>;
-				mem-word-width = <0x80>;
-				phandle = <0x34>;
-			};
-
-			vip2@100000180 {
-				compatible = "ALTR,vip-frame-reader-14.0", "ALTR,vip-frame-reader-9.1", "simple-framebuffer";
-				reg = <0x00180 0x80>;
-				interrupt-parent = <0x2>;
-				interrupts = <0x0 0x2c 0x4>;
-				max-width = <0x280>;
-				max-height = <0x1e0>;
-				bits-per-color = <0x8>;
-				colors-per-beat = <0x4>;
-				beats-per-pixel = <0x1>;
-				mem-word-width = <0x80>;
-				phandle = <0x37>;
-			};
+			vip@100000000 {
+				compatible = "altr,vip-18.1", "altr,vip-frame-buffer-2.0";
+				reg = <0x00000 0x40>;
+				interrupts = <0 72 4>;
+				altr,bits-per-symbol = <8>;	/* embeddedsw.dts.params.altr,bits-per-symbol type NUMBER */
+				altr,max-height = <1024>;	/* embeddedsw.dts.params.altr,max-height type NUMBER */
+				altr,max-width = <1280>;	/* embeddedsw.dts.params.altr,max-width type NUMBER */
+				altr,mem-port-width = <256>;	/* embeddedsw.dts.params.altr,mem-port-width type NUMBER */
+			}; //end vip@0x100000000 (alt_vip_cl_vfb_0)
 
 			sysid@100010000 {
 				compatible = "altr,sysid-18.1", "altr,sysid-1.0";
@@ -654,15 +633,6 @@
 				gpio-controller;
 				phandle = <0x69>;
 			};
-		};
-
-		fpga_bridge@ff500000 {
-			compatible = "altr,socfpga-hps2fpga-bridge";
-			reg = <0xff500000 0x10000>;
-			resets = <0x23 0x60>;
-			clocks = <0x5>;
-			phandle = <0x4a>;
-      bridge-enable = <1>;
 		};
 
 		fpgamgr@ff706000 {
@@ -1087,7 +1057,8 @@
 
 	memory@0 {
 		device_type = "memory";
-		reg = <0x0 0x40000000>;
+		reg = <0x00000000 0x40000000>,
+          <0xc0000000 0x10000000>;
 	};
 
 	leds {
@@ -1245,8 +1216,8 @@
 		ddr_2x_dqs_clk_gate = "/soc/clkmgr@ffd04000/clocks/ddr_2x_dqs_clk_gate";
 		ddr_dq_clk_gate = "/soc/clkmgr@ffd04000/clocks/ddr_dq_clk_gate";
 		h2f_user2_clk = "/soc/clkmgr@ffd04000/clocks/h2f_user2_clk";
-		fpga_bridge0 = "/soc/fpga_bridge@ff400000";
-		fpga_bridge1 = "/soc/fpga_bridge@ff500000";
+		fpga_bridge0 = "/soc/fpga_bridge@c0000000";
+		fpga_bridge1 = "/soc/fpga_bridge@ff400000";
 		fpgamgr0 = "/soc/fpgamgr@ff706000";
 		gmac0 = "/soc/ethernet@ff700000";
 		gmac1 = "/soc/ethernet@ff702000";
@@ -1284,13 +1255,9 @@
 		watchdog0 = "/soc/watchdog@ffd02000";
 		watchdog1 = "/soc/watchdog@ffd03000";
 		regulator_3_3v = "/vcc3p3-regulator";
-		alt_vip_vfr_0 = "/soc/fpga_bridge@ff400000/vip@100000100";
-		alt_vip_vfr_1 = "/soc/fpga_bridge@ff400000/vip@100000180";
-		alt_vip_mix_0 = "/soc/fpga_bridge@ff400000/vip-mix@100000000";
 		sysid_qsys = "/soc/fpga_bridge@ff400000/sysid@100010000";
 		led_pio = "/soc/fpga_bridge@ff400000/gpio@100010040";
 		dipsw_pio = "/soc/fpga_bridge@ff400000/gpio@100010080";
 		button_pio = "/soc/fpga_bridge@ff400000/gpio@1000100c0";
-		hps_0_arm_gic_0 = "/soc/intc@fffed000";
 	};
 };
