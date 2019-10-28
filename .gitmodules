@@ -2,3 +2,7 @@
 	path = meta-altera
 	url = git@github.com:altera-opensource/meta-altera.git
 	branch = angstrom-v2019.06-yocto2.7
+[submodule "meta-openembedded"]
+	path = meta-openembedded
+	url = git@github.com:openembedded/meta-openembedded.git
+	branch = warrior
