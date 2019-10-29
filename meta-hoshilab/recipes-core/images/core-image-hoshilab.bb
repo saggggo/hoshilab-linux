@@ -4,4 +4,4 @@ DESCRIPTION = "Hoshilab linux"
 
 PACKAGE_INSTALL += " packagegroup-self-hosted-debug"
 LICENSE = "MIT"
-IMAGE_FSTYPES = "ext4"
+# IMAGE_FSTYPES = "ext4"
